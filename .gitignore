@@ -1,0 +1,34 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+credentials.*
+secrets.*
+passwords.*
+
+# Local state and exports
+*.bak
+*.backup
+*.log
+*.qcow2
+*.vmdk
+*.vdi
+*.iso
+*.img
+*.zip
+*.tar
+*.gz
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+__pycache__/
+*.pyc
