@@ -35,15 +35,21 @@ This work restored access to the system and the array. It does not, by itself, e
 
 The initial boot attempt stopped at the UEFI “No boot device available” message.
 
-![PowerEdge T310 no boot device error](../../images/hardware/poweredge-t310/poweredge-t310-no-boot-device-error.jpeg)
+<a href="../../images/hardware/poweredge-t310/poweredge-t310-no-boot-device-error.jpeg">
+  <img src="../../images/hardware/poweredge-t310/poweredge-t310-no-boot-device-error.jpeg" alt="PowerEdge T310 no boot device error" width="600">
+</a>
 
 PERC identified one foreign disk group with four physical disks in RAID 10.
 
-![PERC foreign RAID 10 configuration](../../images/hardware/poweredge-t310/poweredge-t310-perc6i-foreign-raid10-config.jpeg)
+<a href="../../images/hardware/poweredge-t310/poweredge-t310-perc6i-foreign-raid10-config.jpeg">
+  <img src="../../images/hardware/poweredge-t310/poweredge-t310-perc6i-foreign-raid10-config.jpeg" alt="PERC foreign RAID 10 configuration" width="600">
+</a>
 
 During recovery, the RAID 10 virtual disk was still marked degraded while disk 0 rebuilt. The screen shows the rebuild at 90%; the later non-degraded state was confirmed separately.
 
-![PERC RAID 10 rebuild at 90 percent](../../images/hardware/poweredge-t310/poweredge-t310-perc6i-raid10-rebuild-progress.jpeg)
+<a href="../../images/hardware/poweredge-t310/poweredge-t310-perc6i-raid10-rebuild-progress.jpeg">
+  <img src="../../images/hardware/poweredge-t310/poweredge-t310-perc6i-raid10-rebuild-progress.jpeg" alt="PERC RAID 10 rebuild at 90 percent" width="600">
+</a>
 
 ## Result and interpretation
 
@@ -53,9 +59,13 @@ The boot failure was resolved by importing the foreign RAID configuration and re
 
 After the rebuild, PERC showed all four physical disks online. I checked each disk in PERC and found no reported S.M.A.R.T. errors. The photo below shows the four online disks; the next shows “No Error” for the selected disk.
 
-![PERC showing all four T310 physical disks online](../../images/hardware/poweredge-t310/poweredge-t310-perc6i-physical-disk-optimal.jpeg)
+<a href="../../images/hardware/poweredge-t310/poweredge-t310-perc6i-physical-disk-optimal.jpeg">
+  <img src="../../images/hardware/poweredge-t310/poweredge-t310-perc6i-physical-disk-optimal.jpeg" alt="PERC showing all four T310 physical disks online" width="600">
+</a>
 
-![PERC showing no S.M.A.R.T. error for the selected disk](../../images/hardware/poweredge-t310/poweredge-t310-perc6i-SMART-status.jpeg)
+<a href="../../images/hardware/poweredge-t310/poweredge-t310-perc6i-SMART-status.jpeg">
+  <img src="../../images/hardware/poweredge-t310/poweredge-t310-perc6i-SMART-status.jpeg" alt="PERC showing no S.M.A.R.T. error for the selected disk" width="600">
+</a>
 
 Windows Memory Diagnostic completed two passes without a reported problem. A photo captured the test at 99% of its second pass; completion is based on my observed result rather than that photo.
 
@@ -63,6 +73,6 @@ I reviewed Windows System events and found no notable disk, file system, or hard
 
 These checks support further use of the T310 for testing, but I have not assigned it a permanent home lab role.
 
-## Next assessment
+## Remaining evaluation
 
-Before assigning this machine a permanent lab role, I plan to review available PERC logs, test backup and restore, and observe the system under a sustained workload. The keep-or-retire decision remains open until those checks are complete.
+The T310 boots reliably in the checks completed so far, and PERC currently reports four online disks. Before assigning it a permanent lab role, I plan to review PERC event history, test a backup and restore, and monitor disk state and Windows events during an extended workload. I’ll then weigh its reliability, power use, and noise against its usefulness in the lab. The keep-or-retire decision remains open.
