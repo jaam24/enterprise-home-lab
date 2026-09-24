@@ -7,7 +7,7 @@ This is a working inventory. Specifications and roles should be verified on each
 | HP Z2 Mini G9 | Core i9-12900, 32 GB DDR5, 1 TB storage; NVIDIA T1000 reported | Primary lab host candidate | OS and final configuration pending |
 | Dell Precision 5810 | Specifications to verify | Lab host candidate | Build notes pending |
 | Dell Precision T3600 | Specifications to verify | To be decided | Inventory pending |
-| Dell PowerEdge T310 | Specifications to verify | To be decided | Inventory pending |
+| [Dell PowerEdge T310](dell-poweredge-t310.md) | 32 GB RAM; PERC 6/i; four 500 GB drives in RAID 10 (~1 TB usable); Windows 10 Pro | Unassigned; storage and server-management lab candidate | Boot and RAID recovered; four disks online; initial health checks passed; evaluation paused |
 | Cisco Catalyst 2960-S | Managed switch; exact model and firmware to verify | Networking lab | Configuration pending |
 | BayStack 5520-48T-PWR | 48-port PoE switch; firmware to verify | Networking lab | Configuration pending |
 | Personal desktop | Ryzen 7 7800X3D, 32 GB DDR5, 2 TB Samsung 980 Pro, Radeon RX 6950 XT | Administration/testing | Existing workstation |

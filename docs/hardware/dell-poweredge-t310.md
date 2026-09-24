@@ -1,6 +1,6 @@
 # Dell PowerEdge T310: Boot and RAID Recovery
 
-**Status:** Boot restored; RAID 10 optimal; initial health checks passed. Backup and extended testing pending.
+**Status:** Boot restored; RAID 10 optimal; initial health checks passed. Evaluation paused until the scheduled revisit.
 
 ## Overview
 
@@ -73,6 +73,14 @@ I reviewed Windows System events and found no notable disk, file system, or hard
 
 These checks support further use of the T310 for testing, but I have not assigned it a permanent home lab role.
 
-## Remaining evaluation
+## Remote management check
 
-The T310 boots reliably in the checks completed so far, and PERC currently reports four online disks. Before assigning it a permanent lab role, I plan to review PERC event history, test a backup and restore, and monitor disk state and Windows events during an extended workload. I’ll then weigh its reliability, power use, and noise against its usefulness in the lab. The keep-or-retire decision remains open.
+I configured the T310’s Baseboard Management Controller (BMC) on the local network. The BMC responded to ping at `192.168.1.120`, but connection tests to TCP ports 80 and 443 failed, so I could not reach a web interface. I enabled IPMI over LAN in the BMC settings. A remote IPMI command has not yet been tested, so remote management remains unverified.
+
+<a href="../../images/hardware/poweredge-t310/poweredge-t310-bmc-ipmi-over-lan-enabled.jpeg">
+  <img src="../../images/hardware/poweredge-t310/poweredge-t310-bmc-ipmi-over-lan-enabled.jpeg" alt="BMC configuration showing IPMI over LAN enabled" width="600">
+</a>
+
+## Scheduled revisit
+
+Work on the T310 is paused. A one-time reminder is set for October 21, 2026 to decide whether to bring it back online for remote IPMI testing, backup and restore testing, or further RAID and server-management work. Its permanent role and keep-or-retire decision remain open.
