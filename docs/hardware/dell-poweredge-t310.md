@@ -1,8 +1,10 @@
 # Dell PowerEdge T310: Boot and RAID Recovery
 
-**Status:** Boot restored; RAID 10 rebuild completed. Full system health assessment pending.
+**Status:** Boot restored; RAID 10 optimal; initial health checks passed. Backup and extended testing pending.
 
 ## Overview
+
+I received this Dell PowerEdge T310 from a peer and began assessing whether it was worth keeping for my home lab. The first step was to establish whether it could boot, recover its storage configuration, and pass basic health checks before assigning it a role.
 
 I brought an older Dell PowerEdge T310 back to a bootable state and recovered its existing RAID configuration. The machine initially reported that no boot device was available. After troubleshooting the boot mode and its PowerEdge RAID Controller (PERC), I imported the foreign configuration and booted the existing Windows installation in UEFI mode. PERC then rebuilt the degraded array automatically and subsequently showed all four disks online with the array no longer degraded.
 
@@ -45,8 +47,22 @@ During recovery, the RAID 10 virtual disk was still marked degraded while disk 0
 
 ## Result and interpretation
 
-The boot failure was resolved by importing the foreign RAID configuration and returning to UEFI boot mode. The RAID 10 array recovered from a degraded state and finished rebuilding. These are PERC and boot observations; they do not yet confirm disk SMART health, memory reliability, backup recoverability, or sustained workload stability.
+The boot failure was resolved by importing the foreign RAID configuration and returning to UEFI boot mode. The RAID 10 array recovered from a degraded state and finished rebuilding. Initial disk, memory, and Windows event checks have since been completed, but backup recoverability and sustained workload stability remain untested.
+
+## Initial health assessment
+
+After the rebuild, PERC showed all four physical disks online. I checked each disk in PERC and found no reported S.M.A.R.T. errors. The photo below shows the four online disks; the next shows “No Error” for the selected disk.
+
+![PERC showing all four T310 physical disks online](../../images/hardware/poweredge-t310/poweredge-t310-perc6i-physical-disk-optimal.jpeg)
+
+![PERC showing no S.M.A.R.T. error for the selected disk](../../images/hardware/poweredge-t310/poweredge-t310-perc6i-SMART-status.jpeg)
+
+Windows Memory Diagnostic completed two passes without a reported problem. A photo captured the test at 99% of its second pass; completion is based on my observed result rather than that photo.
+
+I reviewed Windows System events and found no notable disk, file system, or hardware errors. The unexpected-shutdown entries corresponded to times when I disconnected the power cable.
+
+These checks support further use of the T310 for testing, but I have not assigned it a permanent home lab role.
 
 ## Next assessment
 
-Before assigning this machine a permanent lab role, I plan to record the exact disk models and PERC details, review PERC and system logs, run available hardware diagnostics, check the operating system and storage events, and test backup and restore options. The keep-or-retire decision remains open until that assessment is complete.
+Before assigning this machine a permanent lab role, I plan to review available PERC logs, test backup and restore, and observe the system under a sustained workload. The keep-or-retire decision remains open until those checks are complete.
