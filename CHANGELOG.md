@@ -5,6 +5,7 @@ Changes to the home lab and its documentation are recorded here. A documentation
 ## 2026-09-30
 
 ### Dell workstation assessments
+- Recorded the T5810 H310 removal and retest, `smartmontools` checks, and proposed secondary Proxmox role with mirrored SATA SSD boot storage; deployment remains pending.
 - Expanded the T5810 report with seven captioned screenshots covering BIOS settings, PERC disk detection, and Ubuntu drive, partition, and read-only volume inspection.
 - Added the T3600 no-display troubleshooting record, including memory isolation, graphics-card tests, and the pending direct display connection.
 - Added the Precision Tower 5810 recovery and storage assessment: 64 GB RAM installation restored video; Ubuntu live USB inspection and SMART checks completed; OS installation and RAID creation remain pending.

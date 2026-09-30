@@ -4,7 +4,7 @@
   <img src="../../images/hardware/precision-t5810/dell-precision-tower-5810-front-chassis.jpeg" alt="Front of the Dell Precision Tower 5810" width="280">
 </a>
 
-**Status:** Video output restored after memory installation; Ubuntu live USB inspection completed; both tested HDDs passed SMART tests. Operating-system installation and final storage design remain pending.
+**Status:** Video output restored after memory installation; Ubuntu live USB inspection completed; both tested HDDs passed SMART tests. Planned as a secondary Proxmox VE host; installation and storage changes have not been completed.
 
 ## Overview
 
@@ -25,7 +25,7 @@ The remaining boot failure was investigated separately. The two detected hard dr
 | Intel storage firmware | Intel Rapid Storage Technology enterprise SATA Option ROM 4.0.0.1016 |
 | Installed operating system | No bootable OS found on the inspected HDDs |
 
-These details describe the assessment configuration. The final storage layout and permanent lab role have not been selected.
+These details describe the assessment configuration. The proposed deployment uses different boot drives and SATA settings, as described below; those changes have not been completed.
 
 ## Recovery and inspection timeline
 
@@ -33,8 +33,9 @@ These details describe the assessment configuration. The final storage layout an
 2. **Memory installation:** I found no RAM installed and added 64 GB DDR4. Video output returned.
 3. **BIOS drive inspection:** BIOS detected two 250 GB WDC HDDs and the optical drive.
 4. **Storage utilities:** Intel RSTe listed both HDDs as non-RAID disks with no RAID volumes defined. The PowerEdge RAID Controller (PERC) H310 utility showed no physical disks and no virtual-disk configuration during the assessment.
-5. **Live USB inspection:** I used Ubuntu from a live USB to inspect the drives without installing an operating system or creating a RAID array.
-6. **Disk checks:** Both WD drives passed the SMART tests I ran, with no issues reported in the reviewed logs.
+5. **PERC removal and retest:** I removed the H310 and restarted the workstation. Its initialization screen disappeared, while Intel RSTe continued to detect both HDDs. The system still reported no bootable device. This confirmed that the HDDs did not depend on PERC and that removing it did not resolve the boot failure.
+6. **Live USB inspection:** I used Ubuntu from a live USB to inspect the drives without installing an operating system or creating a RAID array.
+7. **Disk checks:** I installed `smartmontools` in the Ubuntu live session and checked both WD drives. Both passed the SMART tests I ran, with no issues reported in the reviewed logs.
 
 The two storage utilities showed different device views: the HDDs were visible through the motherboard SATA/Intel storage path, while PERC showed no disks. A “RAID On” BIOS setting did not mean a RAID volume had already been created.
 
@@ -81,7 +82,7 @@ The PERC H310 virtual-disk screen shows “No Configuration Present,” zero dis
   <img src="../../images/hardware/precision-t5810/dell-precision-tower-5810-perc-h310-physical-disk-none-present.jpeg" alt="PERC H310 physical-disk screen showing No PD Present" width="600">
 </a>
 
-These screens document PERC's view during the assessment. They do not mean the workstation had no HDDs: BIOS, Intel RSTe, and the later Ubuntu session detected the drives through the motherboard SATA path.
+These screens document PERC's view during the assessment. They do not mean the workstation had no HDDs: BIOS, Intel RSTe, and the later Ubuntu session detected the drives through the motherboard SATA path. After I removed the H310, its initialization screen disappeared and Intel RSTe still detected both HDDs. The card was therefore outside the active drive path; the no-bootable-device message persisted.
 
 </details>
 
@@ -119,10 +120,34 @@ The completed SMART checks are recorded from my reported results. These screensh
 
 ## Result and interpretation
 
-Installing memory restored video output and made further inspection possible. The live USB session established that both drives were accessible and passed the reported SMART checks. Those results support continued evaluation, but sustained workload stability and the final workstation configuration have not been validated.
+Missing RAM explained the initial lack of video: installing memory restored output and made further inspection possible. Removing the unused H310 left both HDDs accessible through Intel SATA. The inspected drives lacked a bootable operating system, explaining the remaining no-bootable-device message.
+
+Both HDDs passed the reported SMART checks. These results support continued evaluation and noncritical lab testing, but sustained workload stability and the final workstation configuration have not been validated. I have not established that every hardware component is fault-free.
 
 No operating system was installed, no drives were formatted, and no RAID volume was created during this assessment.
 
-## Next assessment
+## Planned deployment
 
-The remaining decisions are the storage connection and mode, operating system, and intended lab role. CPU, graphics, firmware, and network-interface details still need to be recorded before the workstation inventory is treated as complete.
+I plan to use the T5810 as a secondary Proxmox VE host for larger VM groups and memory-intensive lab environments. The HP Z2 Mini G9 is intended to serve as the primary, more efficient compute host. These roles describe the proposed design; Proxmox deployment has not yet been completed on the T5810.
+
+| Area | Proposed configuration |
+| --- | --- |
+| Host role | Secondary Proxmox VE host |
+| Boot storage | Two 256 GB SATA SSDs in a ZFS mirror |
+| Drive connection | Motherboard SATA, with PERC H310 left removed |
+| SATA mode | AHCI, replacing the RAID On setting used during assessment |
+| Existing HDDs | Set aside from the primary boot configuration |
+| VM storage | Allocation to be decided after the host is running |
+| Memory | 64 GB currently; potential expansion subject to DIMM and platform compatibility |
+
+The mirrored boot configuration is planned; neither SSD installation nor ZFS configuration has been performed.
+
+### Remaining work
+
+1. Record the exact CPU, core and thread count, and installed DIMM layout from the live environment using `lscpu`, `sudo dmidecode -t processor`, and `sudo dmidecode -t memory`.
+2. Leave the H310 removed, set aside the two inspected HDDs, and install the two intended SATA SSDs.
+3. Change the motherboard SATA mode to AHCI and install Proxmox VE using a ZFS mirror on the two SSDs.
+4. Validate the installation, then decide on additional VM storage.
+5. Verify compatibility before installing any additional DDR4 memory.
+
+A possible additional 64–128 GB of DDR4 would bring the total to 128–192 GB if the modules and configuration are supported. This is a future possibility, rather than an installed or verified configuration. Graphics, firmware, and network-interface details also remain to be documented.

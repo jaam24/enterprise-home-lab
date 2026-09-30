@@ -15,8 +15,8 @@ A hands-on infrastructure lab for learning, testing, and documenting systems adm
 
 | Equipment | Current role or status |
 | --- | --- |
-| HP Z2 Mini G9 | Intended primary lab machine; deployment pending |
-| [Dell Precision Tower 5810](docs/hardware/dell-precision-t5810.md) | Video restored; initial HDD checks passed; OS and storage design pending |
+| HP Z2 Mini G9 | Planned primary Proxmox host; deployment pending |
+| [Dell Precision Tower 5810](docs/hardware/dell-precision-t5810.md) | Video restored; initial HDD checks passed; secondary Proxmox host planned |
 | [Dell Precision T3600](docs/hardware/dell-precision-t3600.md) | No-display troubleshooting in progress; direct cabling test pending |
 | [Dell PowerEdge T310](docs/hardware/dell-poweredge-t310.md) | Boot and RAID recovered; evaluation paused until October 21 revisit |
 | Cisco Catalyst 2960-S | Available managed switch |
