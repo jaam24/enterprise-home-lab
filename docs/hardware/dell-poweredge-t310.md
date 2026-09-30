@@ -1,5 +1,9 @@
 # Dell PowerEdge T310: Boot and RAID Recovery
 
+<a href="../../images/hardware/poweredge-t310/poweredge-t310-front-chassis.jpeg">
+  <img src="../../images/hardware/poweredge-t310/poweredge-t310-front-chassis.jpeg" alt="Front of the Dell PowerEdge T310" width="280">
+</a>
+
 **Status:** Boot restored; RAID 10 optimal; initial health checks passed. Evaluation paused until the scheduled revisit.
 
 ## Overview

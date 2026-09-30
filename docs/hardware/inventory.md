@@ -5,8 +5,8 @@ This is a working inventory. Specifications and roles should be verified on each
 | Device | Known or reported details | Intended or current role | Status |
 | --- | --- | --- | --- |
 | HP Z2 Mini G9 | Core i9-12900, 32 GB DDR5, 1 TB storage; NVIDIA T1000 reported | Primary lab host candidate | OS and final configuration pending |
-| Dell Precision 5810 | Specifications to verify | Lab host candidate | Build notes pending |
-| Dell Precision T3600 | Specifications to verify | To be decided | Inventory pending |
+| [Dell Precision Tower 5810](dell-precision-t5810.md) | 64 GB DDR4; two 250 GB SATA HDDs inspected using Ubuntu live USB | Lab host candidate | Video restored after RAM installation; both tested HDDs passed SMART tests; OS and storage design pending |
+| [Dell Precision T3600](dell-precision-t3600.md) | 250 GB HDD and optical drive observed; initially 16 GB DDR3, reduced to two 4 GB DIMMs during testing | To be decided | Powers on without display; graphics and cabling assessment unresolved |
 | [Dell PowerEdge T310](dell-poweredge-t310.md) | 32 GB RAM; PERC 6/i; four 500 GB drives in RAID 10 (~1 TB usable); Windows 10 Pro | Unassigned; storage and server-management lab candidate | Boot and RAID recovered; four disks online; initial health checks passed; evaluation paused |
 | Cisco Catalyst 2960-S | Managed switch; exact model and firmware to verify | Networking lab | Configuration pending |
 | BayStack 5520-48T-PWR | 48-port PoE switch; firmware to verify | Networking lab | Configuration pending |
