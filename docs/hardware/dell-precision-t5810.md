@@ -47,6 +47,76 @@ The two storage utilities showed different device views: the HDDs were visible t
 
 Neither inspected HDD provided a bootable OS. Device names above identify the drives in that live session and may change in a later session.
 
+## Troubleshooting evidence
+
+The screenshots below follow the storage investigation from BIOS inspection through the Ubuntu live USB session. Each image opens at full size when clicked.
+
+<details>
+<summary>BIOS: boot sequence and SATA operation</summary>
+
+I checked the boot configuration after video output returned. The boot-sequence screen shows Legacy mode selected and both WDC drives listed. A drive appearing in this list does not establish that it contains a bootable operating system.
+
+<a href="../../images/hardware/precision-t5810/dell-precision-tower-5810-bios-legacy-boot-sequence.jpeg">
+  <img src="../../images/hardware/precision-t5810/dell-precision-tower-5810-bios-legacy-boot-sequence.jpeg" alt="T5810 BIOS showing Legacy boot mode and two WDC HDD boot entries" width="600">
+</a>
+
+I also checked SATA operation. This screen shows **RAID On** selected and explains that Disabled hides the integrated SATA controllers. This setting enables RAID support; it does not demonstrate that an array exists.
+
+<a href="../../images/hardware/precision-t5810/dell-precision-tower-5810-bios-sata-operation-raid-on.jpeg">
+  <img src="../../images/hardware/precision-t5810/dell-precision-tower-5810-bios-sata-operation-raid-on.jpeg" alt="T5810 BIOS SATA Operation set to RAID On" width="600">
+</a>
+
+</details>
+
+<details>
+<summary>PERC: no virtual configuration or physical disks detected</summary>
+
+The PERC H310 virtual-disk screen shows “No Configuration Present,” zero disk groups, zero virtual disks, and zero physical disks. I checked the physical-disk tab as well; it showed “No PD Present.”
+
+<a href="../../images/hardware/precision-t5810/dell-precision-tower-5810-perc-h310-virtual-disk-no-configuration.jpeg">
+  <img src="../../images/hardware/precision-t5810/dell-precision-tower-5810-perc-h310-virtual-disk-no-configuration.jpeg" alt="PERC H310 virtual-disk screen showing no configuration and zero disks" width="600">
+</a>
+
+<a href="../../images/hardware/precision-t5810/dell-precision-tower-5810-perc-h310-physical-disk-none-present.jpeg">
+  <img src="../../images/hardware/precision-t5810/dell-precision-tower-5810-perc-h310-physical-disk-none-present.jpeg" alt="PERC H310 physical-disk screen showing No PD Present" width="600">
+</a>
+
+These screens document PERC's view during the assessment. They do not mean the workstation had no HDDs: BIOS, Intel RSTe, and the later Ubuntu session detected the drives through the motherboard SATA path.
+
+</details>
+
+<details>
+<summary>Ubuntu: drive inventory and GPT partition inspection</summary>
+
+In the live USB session, the block-device listing showed two approximately 232.9 GiB HDDs. It showed no partitions under `sda`, while `sdb` had a 128 MiB partition and a larger NTFS volume labeled `BACK-UPS`. The Ubuntu USB appeared separately as `sdc`.
+
+<a href="../../images/hardware/precision-t5810/dell-precision-tower-5810-ubuntu-lsblk-drive-inventory.jpeg">
+  <img src="../../images/hardware/precision-t5810/dell-precision-tower-5810-ubuntu-lsblk-drive-inventory.jpeg" alt="Ubuntu block-device listing showing two HDDs, the BACK-UPS NTFS volume, and the live USB" width="600">
+</a>
+
+The `fdisk` output for `/dev/sdb` showed GPT partitioning, a 128 MiB Microsoft reserved partition, and a Microsoft basic-data partition occupying most of the disk. I used this inspection to understand the existing layout before deciding on an operating system or storage configuration.
+
+<a href="../../images/hardware/precision-t5810/dell-precision-tower-5810-ubuntu-fdisk-sdb-partitions.jpeg">
+  <img src="../../images/hardware/precision-t5810/dell-precision-tower-5810-ubuntu-fdisk-sdb-partitions.jpeg" alt="Ubuntu fdisk output showing the sdb GPT partition table" width="600">
+</a>
+
+</details>
+
+<details>
+<summary>Ubuntu: read-only volume inspection and unpartitioned drive</summary>
+
+I mounted `/dev/sdb2` with the `ro` option and listed the root of the volume. The visible listing contained only `System Volume Information`, apart from the directory entries. This was a read-only check of the visible contents, rather than a recovery scan for deleted data.
+
+The same screenshot shows `fdisk -l /dev/sda` reporting the drive's capacity and model without a partition table or partition entries.
+
+<a href="../../images/hardware/precision-t5810/dell-precision-tower-5810-ubuntu-read-only-backup-mount-fdisk-sda.jpeg">
+  <img src="../../images/hardware/precision-t5810/dell-precision-tower-5810-ubuntu-read-only-backup-mount-fdisk-sda.jpeg" alt="Ubuntu commands mounting the backup volume read-only and inspecting sda with fdisk" width="600">
+</a>
+
+</details>
+
+The completed SMART checks are recorded from my reported results. These screenshots show the configuration and content inspection, rather than the SMART test logs.
+
 ## Result and interpretation
 
 Installing memory restored video output and made further inspection possible. The live USB session established that both drives were accessible and passed the reported SMART checks. Those results support continued evaluation, but sustained workload stability and the final workstation configuration have not been validated.
