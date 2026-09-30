@@ -5,6 +5,7 @@ Changes to the home lab and its documentation are recorded here. A documentation
 ## 2026-09-30
 
 ### Dell workstation assessments
+- Updated the T5810's verified Xeon E5-1620 v3, 64 GB DDR4 ECC RDIMM configuration, and BIOS A09; marked H310/HDD removal, SSD installation, and AHCI selection complete. Proxmox installation and ZFS configuration remain pending.
 - Recorded the T5810 H310 removal and retest, `smartmontools` checks, and proposed secondary Proxmox role with mirrored SATA SSD boot storage; deployment remains pending.
 - Expanded the T5810 report with seven captioned screenshots covering BIOS settings, PERC disk detection, and Ubuntu drive, partition, and read-only volume inspection.
 - Added the T3600 no-display troubleshooting record, including memory isolation, graphics-card tests, and the pending direct display connection.

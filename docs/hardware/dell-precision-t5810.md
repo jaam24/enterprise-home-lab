@@ -4,7 +4,7 @@
   <img src="../../images/hardware/precision-t5810/dell-precision-tower-5810-front-chassis.jpeg" alt="Front of the Dell Precision Tower 5810" width="280">
 </a>
 
-**Status:** Video output restored after memory installation; Ubuntu live USB inspection completed; both tested HDDs passed SMART tests. Planned as a secondary Proxmox VE host; installation and storage changes have not been completed.
+**Status:** Video output restored; CPU and RAM identified; HDD inspection completed. PERC H310 and the two HDDs removed, two SATA SSDs installed, and SATA mode changed to AHCI. Proxmox VE installation and ZFS mirror configuration remain pending.
 
 ## Overview
 
@@ -17,7 +17,10 @@ The remaining boot failure was investigated separately. The two detected hard dr
 | Component | Observed configuration |
 | --- | --- |
 | System | Dell Precision Tower 5810 |
-| Memory | 64 GB DDR4, two 32 GB DIMMs |
+| Processor | Intel Xeon E5-1620 v3 @ 3.50 GHz; four cores shown in BIOS |
+| Memory | 64 GB DDR4 ECC RDIMM; two 32 GB modules in DIMM1 and DIMM2; BIOS-reported speed 2133; two active channels |
+| Available DIMM slots | DIMM3–DIMM8 shown empty in the BIOS capture |
+| BIOS | A09 |
 | HDDs tested | Two WDC WD2500AAKX-75U6AA0 250 GB SATA HDDs, approximately 232.8 GiB each |
 | Optical drive | PLDS DVD-ROM DS-8DBSH |
 | Boot mode during inspection | Legacy |
@@ -25,7 +28,7 @@ The remaining boot failure was investigated separately. The two detected hard dr
 | Intel storage firmware | Intel Rapid Storage Technology enterprise SATA Option ROM 4.0.0.1016 |
 | Installed operating system | No bootable OS found on the inspected HDDs |
 
-These details describe the assessment configuration. The proposed deployment uses different boot drives and SATA settings, as described below; those changes have not been completed.
+These details describe the original assessment configuration. The BIOS system-information screenshot confirms the CPU, memory type, speed, DIMM placement, and BIOS version. Since that assessment, I have removed PERC and both HDDs, installed the two intended SATA SSDs, and changed SATA operation to AHCI. The HDD and RAID On entries above are historical.
 
 ## Recovery and inspection timeline
 
@@ -36,6 +39,8 @@ These details describe the assessment configuration. The proposed deployment use
 5. **PERC removal and retest:** I removed the H310 and restarted the workstation. Its initialization screen disappeared, while Intel RSTe continued to detect both HDDs. The system still reported no bootable device. This confirmed that the HDDs did not depend on PERC and that removing it did not resolve the boot failure.
 6. **Live USB inspection:** I used Ubuntu from a live USB to inspect the drives without installing an operating system or creating a RAID array.
 7. **Disk checks:** I installed `smartmontools` in the Ubuntu live session and checked both WD drives. Both passed the SMART tests I ran, with no issues reported in the reviewed logs.
+8. **Hardware identification:** The BIOS system-information screen showed a Xeon E5-1620 v3, four cores, BIOS A09, and 64 GB DDR4 ECC RDIMM memory in DIMM1 and DIMM2 at a reported speed of 2133.
+9. **Storage preparation:** With the H310 already removed, I removed both inspected HDDs and installed two 256 GB SATA SSDs for the intended Proxmox build. I changed the motherboard SATA mode from RAID On to AHCI.
 
 The two storage utilities showed different device views: the HDDs were visible through the motherboard SATA/Intel storage path, while PERC showed no disks. A “RAID On” BIOS setting did not mean a RAID volume had already been created.
 
@@ -124,30 +129,31 @@ Missing RAM explained the initial lack of video: installing memory restored outp
 
 Both HDDs passed the reported SMART checks. These results support continued evaluation and noncritical lab testing, but sustained workload stability and the final workstation configuration have not been validated. I have not established that every hardware component is fault-free.
 
-No operating system was installed, no drives were formatted, and no RAID volume was created during this assessment.
+No operating system was installed, no drives were formatted, and no RAID volume was created during the live USB inspection. The later SSD installation and AHCI change prepared the workstation for the proposed deployment.
 
-## Planned deployment
+## Current configuration and planned deployment
 
-I plan to use the T5810 as a secondary Proxmox VE host for larger VM groups and memory-intensive lab environments. The HP Z2 Mini G9 is intended to serve as the primary, more efficient compute host. These roles describe the proposed design; Proxmox deployment has not yet been completed on the T5810.
+I plan to use the T5810 as a secondary Proxmox VE host for larger VM groups and memory-intensive lab environments. The HP Z2 Mini G9 is intended to serve as the primary, more efficient compute host. The hardware preparation below is complete; Proxmox installation and ZFS configuration remain pending.
 
-| Area | Proposed configuration |
-| --- | --- |
-| Host role | Secondary Proxmox VE host |
-| Boot storage | Two 256 GB SATA SSDs in a ZFS mirror |
-| Drive connection | Motherboard SATA, with PERC H310 left removed |
-| SATA mode | AHCI, replacing the RAID On setting used during assessment |
-| Existing HDDs | Set aside from the primary boot configuration |
-| VM storage | Allocation to be decided after the host is running |
-| Memory | 64 GB currently; potential expansion subject to DIMM and platform compatibility |
-
-The mirrored boot configuration is planned; neither SSD installation nor ZFS configuration has been performed.
+| Area | Configuration | State |
+| --- | --- | --- |
+| Processor | Intel Xeon E5-1620 v3 @ 3.50 GHz; four cores shown in BIOS | Identified |
+| Memory | 64 GB DDR4 ECC RDIMM; 32 GB each in DIMM1 and DIMM2; reported speed 2133 | Installed and identified |
+| BIOS | A09 | Identified |
+| PERC H310 | Removed; previously confirmed outside the HDD drive path | Completed |
+| Original HDDs | Both inspected 250 GB WD drives removed | Completed |
+| SSDs | Two 256 GB SATA SSDs installed in place of the HDDs | Completed |
+| SATA mode | Changed from RAID On to AHCI | Completed |
+| Host role | Secondary Proxmox VE host | Planned |
+| Boot layout | ZFS mirror across the two installed SSDs | Planned; not configured |
+| VM storage | Allocation to be decided after the host is running | Pending |
+| Additional memory | Possible expansion after compatibility checks | Planned; not installed |
 
 ### Remaining work
 
-1. Record the exact CPU, core and thread count, and installed DIMM layout from the live environment using `lscpu`, `sudo dmidecode -t processor`, and `sudo dmidecode -t memory`.
-2. Leave the H310 removed, set aside the two inspected HDDs, and install the two intended SATA SSDs.
-3. Change the motherboard SATA mode to AHCI and install Proxmox VE using a ZFS mirror on the two SSDs.
-4. Validate the installation, then decide on additional VM storage.
-5. Verify compatibility before installing any additional DDR4 memory.
+1. Install Proxmox VE using a ZFS mirror on the two installed SSDs.
+2. Validate the installation, storage, and host stability, then decide on additional VM storage.
+3. Record graphics and network-interface details; confirm the logical CPU count during host validation.
+4. Verify compatibility before installing any additional DDR4 memory.
 
-A possible additional 64–128 GB of DDR4 would bring the total to 128–192 GB if the modules and configuration are supported. This is a future possibility, rather than an installed or verified configuration. Graphics, firmware, and network-interface details also remain to be documented.
+A possible additional 64–128 GB of DDR4 would bring the total to 128–192 GB if the modules and configuration are supported. This is a future possibility, rather than an installed or verified configuration.
